@@ -1,5 +1,12 @@
 FROM drupal:fpm
 
-RUN curl https://drupalconsole.com/installer -L -o drupal.phar \
-    && mv drupal.phar /usr/local/bin/drupal \
-    && chmod +x /usr/local/bin/drupal
+MAINTAINER bander2.imda@gmail.com
+LABEL version="1.0.0"
+
+RUN apt-get update && apt-get install -y wget git \
+    && wget https://getcomposer.org/installer \
+    && php ./installer \
+    && ./composer.phar require drupal/console \
+    && rm ./composer.phar ./installer
+    
+CMD ["/var/www/html/vendor/bin/drupal"]
